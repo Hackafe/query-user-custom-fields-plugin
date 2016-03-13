@@ -16,21 +16,20 @@ after_initialize do
 
       def queryUser
         field_index = request['field_index']
-        field_value = request['field_value']
-        field_name = "user_field_#{field_index}"
+        field_value = ActiveRecord::Base.connection.quote(request['field_value'])
+        field_name = ActiveRecord::Base.connection.quote("user_field_#{field_index}")
         sql = <<-SQL
           SELECT
               users.username, users.email
               FROM user_custom_fields, users
-              WHERE user_custom_fields.name=$1 and
-              value=$2 and users.id != -1
+              WHERE user_custom_fields.name=#{field_name} and
+              value=#{field_value}
+              and users.id != -1
         SQL
-        raw_connection = ActiveRecord::Base.
-          connection.
-          raw_connection
 
-        raw_connection.prepare('q', sql)
-        result = raw_connection.exec_prepared('q', [field_name, field_value])
+        result = ActiveRecord::Base.
+          connection.
+          execute(sql)
         render json: result
       end
 
