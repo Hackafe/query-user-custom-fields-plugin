@@ -22,8 +22,7 @@ after_initialize do
           SELECT
               users.username, users.email
               FROM user_custom_fields, users
-              WHERE user_custom_fields.name=#{field_name} and
-              value=#{field_value}
+              WHERE value=#{field_value}
               and users.id != -1
         SQL
 
@@ -53,7 +52,7 @@ after_initialize do
       end
 
       def ensure_query_params
-        render_missing_params if request['field_index'].blank? || request['field_value'].blank?
+        render_missing_params if request['field_value'].blank?
       end
     end
   end
