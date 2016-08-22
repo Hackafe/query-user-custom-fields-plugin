@@ -46,7 +46,7 @@ after_initialize do
       end
 
       def render_missing_params
-        render status: :bad_request, json: {error: 'field_index or field_value param missing'}
+        render status: :bad_request, json: {error: 'field_value param missing'}
       end
 
       def ensure_query_params
