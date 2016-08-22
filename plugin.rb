@@ -15,9 +15,7 @@ after_initialize do
       before_filter :ensure_query_params
 
       def queryUser
-        field_index = request['field_index']
         field_value = ActiveRecord::Base.connection.quote(request['field_value'])
-        field_name = ActiveRecord::Base.connection.quote("user_field_#{field_index}")
         sql = <<-SQL
           SELECT
               users.username, users.email
